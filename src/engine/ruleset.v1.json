@@ -1,0 +1,127 @@
+{
+  "rulesetVersion": "1.0.4",
+  "engineCompatibility": {
+    "minEngineVersion": "1.0.0",
+    "maxEngineVersion": "1.x"
+  },
+  "rules": [
+    {
+      "id": "mixed_maturity_profile",
+      "when": {
+        "anyDomainBelow": 34,
+        "anyDomainAbove": 67
+      },
+      "summary": {
+        "primary": "Your organisation shows uneven AI capability development, with strengths in some areas and gaps in others.",
+        "secondary": "This pattern often occurs when governance or operational practices advance faster than shared understanding, ethical framing, or reflective learning."
+      },
+      "actions": [
+        {
+          "id": "align_weak_domains_to_strengths",
+          "priority": 90,
+          "text": "Focus on strengthening weaker domains—particularly ethics, shared understanding, and reflective practice—to bring them into alignment with existing strengths."
+        }
+      ],
+      "risks": [
+        "Uneven AI capability can lead to inconsistent decision-making, unclear accountability, and erosion of trust if gaps are not addressed."
+      ]
+    },
+    {
+      "id": "foundation_gap",
+      "when": {
+        "anyDomainBelow": 34
+      },
+      "summary": {
+        "primary": "Your organisation is at an early stage of AI capability development, with significant foundational gaps.",
+        "secondary": "Before scaling AI use, attention should be given to shared understanding, ethical framing, and governance basics."
+      },
+      "actions": [
+        {
+          "id": "establish_foundations",
+          "priority": 100,
+          "text": "Establish shared foundations for AI understanding, ethics, and governance before expanding use cases."
+        }
+      ],
+      "risks": [
+        "Scaling AI use without foundations increases the risk of misuse, inconsistency, and loss of trust."
+      ],
+      "blockers": ["scale", "automation"]
+    },
+    {
+      "id": "broadly_established_developing",
+      "when": {
+        "noDomainBelow": 34,
+        "anyDomainBelow": 67
+      },
+      "summary": {
+        "primary": "Your organisation shows broadly established AI capability, with some areas still developing.",
+        "secondary": "The focus should be on consolidating consistent practice, strengthening decision roles and confidence, and embedding reflective improvement across teams."
+      },
+      "actions": [
+        {
+          "id": "consolidate_and_embed",
+          "priority": 40,
+          "text": "Prioritise one or two domains that are still developing, and strengthen them through shared guidance, practical examples, and lightweight review cycles."
+        }
+      ],
+      "risks": [
+        "If developing areas are not strengthened, capability may remain uneven across teams and AI use may depend on informal practices rather than shared expectations."
+      ]
+    },
+    {
+      "id": "strong_ethics_weak_practice",
+      "when": {
+        "ethicsAbove": 67,
+        "practiceBelow": 50
+      },
+      "summary": {
+        "secondary": "Ethical awareness is relatively strong, but practical AI use is not yet embedded."
+      },
+      "actions": [
+        {
+          "id": "translate_ethics_to_practice",
+          "priority": 70,
+          "text": "Translate ethical intentions into a small number of well-defined, supported AI use cases."
+        }
+      ]
+    },
+    {
+      "id": "practice_without_governance",
+      "when": {
+        "practiceAbove": 67,
+        "governanceBelow": 50
+      },
+      "summary": {
+        "secondary": "AI use appears to be progressing faster than governance structures."
+      },
+      "actions": [
+        {
+          "id": "strengthen_governance",
+          "priority": 90,
+          "text": "Strengthen governance, accountability, and escalation routes to keep pace with AI-enabled practices."
+        }
+      ],
+      "risks": [
+        "Unclear ownership and escalation can lead to unmanaged risk as AI use grows."
+      ]
+    },
+    {
+      "id": "mature_capability_profile",
+      "when": {
+        "allDomainsAbove": 80,
+        "noDomainBelow": 67
+      },
+      "summary": {
+        "primary": "Your organisation demonstrates a mature, well-balanced AI capability profile across all domains.",
+        "secondary": "The emphasis should now be on sustaining capability, monitoring emerging risks, and adapting practices as technologies, regulations, and expectations evolve."
+      },
+      "actions": [
+        {
+          "id": "sustain_and_review",
+          "priority": 10,
+          "text": "Maintain regular review and reflection cycles to ensure AI practices remain aligned with organisational values, governance expectations, and changing external contexts."
+        }
+      ]
+    }
+  ]
+}
