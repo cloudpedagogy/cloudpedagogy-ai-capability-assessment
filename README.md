@@ -96,19 +96,3 @@ It is particularly suited to:
 
 The outputs should be treated as starting points for discussion, not definitive judgements.
 
----
-
-## Running the Application Locally
-
-### Prerequisites
-
-- Node.js (v20+ recommended)  
-- npm  
-
-### Install Dependencies
-
-```bash
-npm install
-
-
-
