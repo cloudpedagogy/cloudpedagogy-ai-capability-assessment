@@ -25,6 +25,16 @@ Rather than focusing on specific AI tools or technologies, the assessment examin
 - Explainable, rule-based interpretation  
 - No data storage, transmission, or tracking  
 
+## Example Output
+
+<img
+  src="docs/images/ai-capability-self-assessment.png"
+  width="800"
+  alt="AI Capability Self-Assessment – example output"
+/>
+
+
+
 ## Running the Application Locally
 
 This application is built using a modern JavaScript toolchain and runs entirely in the browser.
