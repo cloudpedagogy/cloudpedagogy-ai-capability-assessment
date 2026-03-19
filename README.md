@@ -8,6 +8,7 @@ Designed for education, research, and public-service organisations, this open, f
 ## 🌐 Live Application
 
 👉 http://ai-capability-self-assessment-cloudpedagogy.s3-website.eu-west-2.amazonaws.com/
+
 ---
 
 ## 🛠️ Getting Started
