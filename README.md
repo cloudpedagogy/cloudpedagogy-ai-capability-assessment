@@ -4,6 +4,49 @@ A lightweight, static, browser-based AI capability self-assessment tool for refl
 
 Designed for education, research, and public-service organisations, this open, framework-led tool supports reflective discussion and capability development rather than auditing, compliance, or benchmarking.
 
+---
+## 🛠️ Getting Started
+
+### Clone the repository
+
+```bash
+git clone [repository-url]
+cd [repository-folder]
+```
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run locally
+
+```bash
+npm run dev
+```
+
+Once running, your terminal will display a local URL (often http://localhost:5173). Open this in your browser to use the application.
+
+### Build for production
+
+```bash
+npm run build
+```
+
+The production build will be generated in the `dist/` directory and can be deployed to any static hosting service.
+
+---
+
+## 🔐 Privacy & Security
+
+- **Fully local**: All data remains in the user's browser  
+- **No backend**: No external API calls or database storage  
+- **Privacy-preserving**: No tracking or data exfiltration  
+- Suitable for use in sensitive organisational and governance contexts  
+
+---
+
 ## Overview
 
 The AI Capability Self-Assessment helps individuals and teams explore how well their organisation is positioned to use artificial intelligence responsibly, effectively, and sustainably.
@@ -35,33 +78,7 @@ Rather than focusing on specific AI tools or technologies, the assessment examin
 
 
 
-## Running the Application Locally
 
-This application is built using a modern JavaScript toolchain and runs entirely in the browser.
-
-## Prerequisites
-
-Node.js (v20 or later recommended)
-
-npm (included with Node.js)
-
-Install and Run
-
-## Install dependencies:
-
-npm install
-
-
-## Start the local development server:
-
-npm run dev
-
-
-## Once running, your terminal will display a local URL (typically):
-
-http://localhost:5173
-
-Open this URL in your web browser to use the application.
 
 ---
 
