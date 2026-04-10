@@ -34,35 +34,49 @@ export default function AssessmentView({ onComplete }: AssessmentViewProps) {
   }
 
   return (
-    <>
-      <p>
+    <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+      <p className="metadata" style={{ marginBottom: "var(--spacing-sm)" }}>
         Question {index + 1} of {QUESTIONS.length}
       </p>
 
-      <h2>{question.text}</h2>
+      <div className="card">
+        <h2>{question.text}</h2>
 
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {OPTIONS.map((label, value) => (
-          <li key={value} style={{ marginBottom: "0.5rem" }}>
-            <label>
-              <input
-                type="radio"
-                name={question.id}
-                checked={responses[question.id] === value}
-                onChange={() => handleSelect(value)}
-              />{" "}
-              {label}
-            </label>
-          </li>
-        ))}
-      </ul>
+        <ul style={{ listStyle: "none", padding: 0, margin: "var(--spacing-lg) 0" }}>
+          {OPTIONS.map((label, value) => (
+            <li key={value} style={{ marginBottom: "var(--spacing-md)" }}>
+              <label style={{ 
+                display: "flex", 
+                alignItems: "center", 
+                gap: "var(--spacing-md)", 
+                cursor: "pointer",
+                padding: "var(--spacing-md)",
+                border: "1px solid var(--color-border-default)",
+                borderRadius: "var(--radius-6)",
+                transition: "background-color 0.2s ease"
+              }}>
+                <input
+                  type="radio"
+                  name={question.id}
+                  checked={responses[question.id] === value}
+                  onChange={() => handleSelect(value)}
+                  style={{ accentColor: "var(--color-text-primary)" }}
+                />
+                <span style={{ fontSize: "1rem", color: "var(--color-text-primary)" }}>{label}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      <button
-        onClick={next}
-        disabled={responses[question.id] === undefined}
-      >
-        {index === QUESTIONS.length - 1 ? "Finish assessment" : "Next"}
-      </button>
-    </>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "var(--spacing-lg)" }}>
+        <button
+          onClick={next}
+          disabled={responses[question.id] === undefined}
+        >
+          {index === QUESTIONS.length - 1 ? "Finish assessment" : "Next"}
+        </button>
+      </div>
+    </div>
   )
 }

@@ -18,45 +18,78 @@ export default function App() {
   const [result, setResult] = useState<FullResult | null>(null)
 
   return (
-    <main style={{ padding: "2rem", maxWidth: 720, margin: "0 auto" }}>
-      {stage === "intro" && (
-        <IntroView
-          onStart={() => {
-            setResult(null)
-            setStage("assessment")
-          }}
-        />
-      )}
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <header style={{ 
+        padding: "var(--spacing-md) var(--spacing-lg)", 
+        borderBottom: "1px solid var(--color-border-default)",
+        backgroundColor: "var(--bg-white)"
+      }}>
+        <div style={{ maxWidth: "var(--max-width)", margin: "0 auto", display: "flex", flexDirection: "column", gap: "4px" }}>
+          <a href="https://www.cloudpedagogy.com/" style={{ 
+            fontSize: "var(--font-size-meta)", 
+            textDecoration: "none", 
+            color: "var(--color-text-secondary)",
+            fontWeight: 500
+          }}>
+            CloudPedagogy
+          </a>
+          <div style={{ fontSize: "1rem", fontWeight: 700 }}>
+            AI Capability Assessment
+          </div>
+        </div>
+      </header>
 
-      {stage === "assessment" && (
-        <AssessmentView
-          onComplete={(responses) => {
-            const scored = scoreAssessment(responses)
-            const recommendations = generateRecommendations(scored)
+      <main style={{ flex: 1 }}>
+        {stage === "intro" && (
+          <IntroView
+            onStart={() => {
+              setResult(null)
+              setStage("assessment")
+            }}
+          />
+        )}
 
-            setResult({
-              ...scored,
-              recommendations
-            })
+        {stage === "assessment" && (
+          <AssessmentView
+            onComplete={(responses) => {
+              const scored = scoreAssessment(responses)
+              const recommendations = generateRecommendations(scored)
 
-            setStage("results")
-          }}
-        />
-      )}
+              setResult({
+                ...scored,
+                recommendations
+              })
 
-      {stage === "results" && result && (
-        <ResultsView
-          result={result}
-          onRestart={() => {
-            setResult(null)
-            setStage("intro")
-          }}
-        />
-      )}
+              setStage("results")
+            }}
+          />
+        )}
 
-      {stage === "results" && !result && (
-        <p>Results are not available. Please restart the assessment.</p>
-      )}
-    </main>
+        {stage === "results" && result && (
+          <ResultsView
+            result={result}
+            onRestart={() => {
+              setResult(null)
+              setStage("intro")
+            }}
+          />
+        )}
+
+        {stage === "results" && !result && (
+          <p>Results are not available. Please restart the assessment.</p>
+        )}
+      </main>
+
+      <footer style={{ 
+        padding: "var(--spacing-lg)", 
+        borderTop: "1px solid var(--color-border-default)",
+        textAlign: "center",
+        backgroundColor: "var(--bg-white)"
+      }}>
+        <p className="metadata" style={{ margin: 0 }}>
+          CloudPedagogy · Governance-ready AI and curriculum systems
+        </p>
+      </footer>
+    </div>
   )
 }
