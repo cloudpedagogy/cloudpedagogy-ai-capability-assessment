@@ -4,7 +4,7 @@ import IntroView from "./views/IntroView"
 import AssessmentView from "./views/AssessmentView"
 import ResultsView from "./views/ResultsView"
 
-import { scoreAssessment, type AssessmentResult } from "./engine/scoring"
+import { scoreAssessment, type AssessmentResult, type Metadata } from "./engine/scoring"
 import { generateRecommendations } from "./engine/recommend"
 
 type AppStage = "intro" | "assessment" | "results"
@@ -16,6 +16,7 @@ type FullResult = AssessmentResult & {
 export default function App() {
   const [stage, setStage] = useState<AppStage>("intro")
   const [result, setResult] = useState<FullResult | null>(null)
+  const [metadata, setMetadata] = useState<Omit<Metadata, 'timestamp'>>({})
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -42,7 +43,8 @@ export default function App() {
       <main style={{ flex: 1 }}>
         {stage === "intro" && (
           <IntroView
-            onStart={() => {
+            onStart={(meta) => {
+              setMetadata(meta)
               setResult(null)
               setStage("assessment")
             }}
@@ -52,7 +54,7 @@ export default function App() {
         {stage === "assessment" && (
           <AssessmentView
             onComplete={(responses) => {
-              const scored = scoreAssessment(responses)
+              const scored = scoreAssessment(responses, metadata)
               const recommendations = generateRecommendations(scored)
 
               setResult({

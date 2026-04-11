@@ -1,6 +1,20 @@
 import { QUESTIONS, type Domain } from "../data/questions"
 
-export type Scores = Record<Domain, number>
+export type Confidence = 'low' | 'medium' | 'high'
+
+export type Response = {
+  value: number
+  confidence: Confidence
+}
+
+export type Metadata = {
+  role?: string
+  department?: string
+  context?: string
+  timestamp: string
+}
+
+export type Scores = Record<import('../data/questions').Domain, number>
 
 export type Derived = {
   domains_at_or_above_mid_count: number
@@ -9,6 +23,12 @@ export type Derived = {
 export type AssessmentResult = {
   scores: Scores
   derived: Derived
+  responses: Record<string, Response>
+  metadata: Metadata
+}
+
+export type AssessmentSnapshot = AssessmentResult & {
+  id: string
 }
 
 const DOMAINS: Domain[] = [
@@ -24,8 +44,12 @@ const DOMAINS: Domain[] = [
 // We convert each domain to a 0–100 score:
 //   domainScore = (sum(domainResponses) / (maxPerQuestion * numQuestionsInDomain)) * 100
 // For v1: maxPerQuestion = 3, numQuestionsInDomain = 4
-export function scoreAssessment(responses: Record<string, number>): AssessmentResult {
+export function scoreAssessment(
+  responses: Record<string, Response>,
+  metadata: Omit<Metadata, 'timestamp'>
+): AssessmentResult {
   const maxPerQuestion = 3
+  const timestamp = new Date().toISOString()
 
   const scores: Scores = {
     awareness: 0,
@@ -56,10 +80,8 @@ export function scoreAssessment(responses: Record<string, number>): AssessmentRe
   }
 
   for (const q of QUESTIONS) {
-    const value = responses[q.id]
-
-    // Defensive: if missing (shouldn’t happen due to UI), treat as 0
-    const safeValue = typeof value === "number" ? value : 0
+    const response = responses[q.id]
+    const safeValue = response?.value ?? 0
 
     domainSums[q.domain] += safeValue
     domainCounts[q.domain] += 1
@@ -78,7 +100,9 @@ export function scoreAssessment(responses: Record<string, number>): AssessmentRe
 
   return {
     scores,
-    derived: { domains_at_or_above_mid_count }
+    derived: { domains_at_or_above_mid_count },
+    responses,
+    metadata: { ...metadata, timestamp }
   }
 }
 

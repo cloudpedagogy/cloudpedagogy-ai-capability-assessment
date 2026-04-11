@@ -2,6 +2,25 @@
 
 A lightweight, static, browser-based AI capability self-assessment tool for reflecting on organisational readiness and maturity across six domains, based on the CloudPedagogy AI Capability Framework.
 
+## 🔗 Role in the CloudPedagogy Ecosystem
+
+**Phase:** Phase 3 — Capability System
+
+**Role:**
+Collects primary reflective data on organizational or team AI capability across six benchmark domains.
+
+**Upstream Inputs:**
+Manual user input based on the **CloudPedagogy AI Capability Framework**.
+
+**Downstream Outputs:**
+Exports structured JSON snapshots used by the **Capability Dashboard**, **Gaps & Risk** diagnostic, and **Scenario Stress Test**.
+
+**Does NOT:**
+- Perform automated benchmarking or institutional audits.
+- Map capability coverage across academic programmes.
+
+For a full system overview, see: [SYSTEM_OVERVIEW.md](../SYSTEM_OVERVIEW.md)
+
 Designed for education, research, and public-service organisations, this open, framework-led tool supports reflective discussion and capability development rather than auditing, compliance, or benchmarking.
 
 ---
@@ -49,12 +68,33 @@ The production build will be generated in the `dist/` directory and can be deplo
 
 ---
 
-## 🔐 Privacy & Security
+## 🔐 Strategic Context
+- **Governance-First**: Designed to reveal organisational blind spots and structural fragility.
+- **Insight-Driven**: Generates interpreted patterns and fragility signals, not just a score.
+- **High-Integrity Data Collection**: Includes **Confidence Indicators** per question and mandatory **Metadata Snapshots**.
+- **Privacy-Preserving**: Runs entirely in the browser; all data stays in `localStorage`.
 
-- **Fully local**: All data remains in the user's browser  
-- **No backend**: No external API calls or database storage  
-- **Privacy-preserving**: No tracking or data exfiltration  
-- Suitable for use in sensitive organisational and governance contexts  
+---
+
+## 📊 Strategic Data Collection Features
+
+This tool has been strengthened to serve as the primary input layer for capability intelligence:
+
+### 1. Snapshot Export System
+Assessments are exported as timestamped snapshots (JSON and Markdown) containing:
+- Capability scores across 6 domains.
+- Metadata: Role, Department, and Assessment Context.
+- Per-question confidence levels.
+
+### 2. Optional Local Progress Tracking
+The app maintains a local-only history of the last 10 assessments. This enables **Trend Analysis** in the results view, showing deltas (+/-) between current and previous self-assessments.
+
+### 3. Confidence Indicators
+Users indicate their confidence (Low/Medium/High) for every response. This ensures that downstream analytics tools can distinguish between "Estimated" and "Verified" capability states.
+
+- [x] Implement confidence indicators
+- [x] Enable local progress tracking
+- [x] Standardise snapshot export format
 
 ---
 

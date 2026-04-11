@@ -70,25 +70,25 @@ function matches(rule: Rule, result: AssessmentResult): boolean {
   } = rule.when
 
   if (anyDomainBelow !== undefined) {
-    if (!Object.values(scores).some(s => s < anyDomainBelow)) {
+    if (!Object.values(scores).some((s) => s < anyDomainBelow)) {
       return false
     }
   }
 
   if (anyDomainAbove !== undefined) {
-    if (!Object.values(scores).some(s => s >= anyDomainAbove)) {
+    if (!Object.values(scores).some((s) => s >= anyDomainAbove)) {
       return false
     }
   }
 
   if (allDomainsAbove !== undefined) {
-    if (!Object.values(scores).every(s => s >= allDomainsAbove)) {
+    if (!Object.values(scores).every((s) => s >= allDomainsAbove)) {
       return false
     }
   }
 
   if (noDomainBelow !== undefined) {
-    if (!Object.values(scores).every(s => s >= noDomainBelow)) {
+    if (!Object.values(scores).every((s) => s >= noDomainBelow)) {
       return false
     }
   }
