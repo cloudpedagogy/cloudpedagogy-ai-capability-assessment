@@ -19,7 +19,6 @@ Exports structured JSON snapshots used by the **Capability Dashboard**, **Gaps &
 - Perform automated benchmarking or institutional audits.
 - Map capability coverage across academic programmes.
 
-For a full system overview, see: [SYSTEM_OVERVIEW.md](../SYSTEM_OVERVIEW.md)
 
 Designed for education, research, and public-service organisations, this open, framework-led tool supports reflective discussion and capability development rather than auditing, compliance, or benchmarking.
 
@@ -159,3 +158,13 @@ CloudPedagogy develops open, governance-credible resources for building confiden
 
 - Website: https://www.cloudpedagogy.com/
 - Framework: https://github.com/cloudpedagogy/cloudpedagogy-ai-capability-framework
+
+---
+
+## Capability and Governance
+This tool supports both AI capability development and lightweight governance.
+
+- **Capability** is developed through structured interaction with real workflows.
+- **Governance** is supported through optional fields that make assumptions, risks, and decisions visible.
+
+All governance inputs are optional and designed to support — not constrain — professional judgement.

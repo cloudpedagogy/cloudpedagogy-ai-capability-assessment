@@ -25,6 +25,8 @@ export type AssessmentResult = {
   derived: Derived
   responses: Record<string, Response>
   metadata: Metadata
+  capabilityNotes?: string
+  governanceNotes?: string
 }
 
 export type AssessmentSnapshot = AssessmentResult & {

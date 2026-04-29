@@ -44,5 +44,20 @@ This application is a frontline reflective tool used by academic teams or depart
 - It is a reflective starting point, not an objective technical test.
 
 ---
-### 10. Tips
-- Ensure users understand this is a *developmental diagnostic*, not a performance evaluation, to encourage honesty.
+### 11. Capability & Governance
+This tool supports both AI capability development and lightweight governance.
+
+#### How Capability is Developed
+- **Reflection**: Users reflect on their current practice across six core domains.
+- **Goal Setting**: Recommendations provide a path for the "Next Step" in capability growth.
+- **Workflow Integration**: The assessment prompts users to consider AI within their specific professional context.
+
+#### How Governance is Supported
+- **Transparency**: Optional fields allow users to document assumptions and risks.
+- **Accountability**: Metadata snapshots (role, dept) ensure assessments are contextualized.
+- **Professional Judgement**: Governance fields are optional, supporting rather than replacing human oversight.
+
+---
+### 12. Explanation of Optional Fields
+- **Capability Notes**: Use this to document what specific capabilities are being targeted or developed through this assessment.
+- **Governance Notes**: Use this to record assumptions made during the assessment, identified risks, or human review notes.
