@@ -1,7 +1,104 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { AssessmentResult, AssessmentSnapshot } from "../engine/scoring"
 import { bandLabel } from "../engine/scoring"
 import CapabilityCharts from "../components/CapabilityCharts"
+
+const STORAGE_KEY = "cp_capability_history"
+const RECOVERY_KEY = "cp_capability_history_corrupted"
+
+function isValidSnapshot(item: unknown): item is AssessmentSnapshot {
+  if (!item || typeof item !== "object") return false
+  const s = item as Partial<AssessmentSnapshot>
+  return typeof s.scores === "object" && s.scores !== null
+}
+
+function preserveCorruptedPayload(raw: string): boolean {
+  try {
+    const uniqueKey = `${RECOVERY_KEY}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+    localStorage.setItem(uniqueKey, raw)
+    return true
+  } catch {
+    // Quota or permission failure: backup failed
+    return false
+  }
+}
+
+function loadHistory(): {
+  history: AssessmentSnapshot[]
+  corruptedPayload: string | null
+} {
+  let historyJson: string | null = null
+  try {
+    historyJson = localStorage.getItem(STORAGE_KEY)
+  } catch {
+    return { history: [], corruptedPayload: null }
+  }
+
+  if (!historyJson) {
+    return { history: [], corruptedPayload: null }
+  }
+
+  try {
+    const parsed = JSON.parse(historyJson)
+    if (!Array.isArray(parsed)) {
+      return { history: [], corruptedPayload: historyJson }
+    }
+    const validSnapshots = parsed.filter(isValidSnapshot)
+    if (validSnapshots.length !== parsed.length) {
+      return { history: validSnapshots, corruptedPayload: historyJson }
+    }
+    return { history: validSnapshots, corruptedPayload: null }
+  } catch {
+    return { history: [], corruptedPayload: historyJson }
+  }
+}
+
+function saveSnapshot(
+  result: ResultsViewProps["result"],
+  currentHistory: AssessmentSnapshot[],
+  corruptedPayload: string | null
+) {
+  if (corruptedPayload !== null) {
+    const backedUp = preserveCorruptedPayload(corruptedPayload)
+    if (!backedUp) {
+      // If a corrupted payload could not be backed up, do not overwrite STORAGE_KEY
+      return
+    }
+  }
+
+  // Prevent duplicate snapshots:
+  // If the latest snapshot in history is identical (same timestamp, metadata and scores),
+  // this is a component remount of the same assessment; do not duplicate it.
+  if (currentHistory.length > 0) {
+    const latest = currentHistory[0]
+    if (
+      latest.metadata?.timestamp === result.metadata?.timestamp &&
+      latest.metadata?.role === result.metadata?.role &&
+      latest.metadata?.department === result.metadata?.department &&
+      latest.metadata?.context === result.metadata?.context &&
+      JSON.stringify(latest.scores) === JSON.stringify(result.scores)
+    ) {
+      return
+    }
+  }
+
+  const id =
+    (result as Partial<AssessmentSnapshot>).id ||
+    (typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : Math.random().toString(36).slice(2))
+
+  const newSnapshot: AssessmentSnapshot = {
+    ...result,
+    id
+  }
+  const newHistory = [newSnapshot, ...currentHistory].slice(0, 10)
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newHistory))
+  } catch {
+    // Storage access or quota error; avoid crashing the view
+  }
+}
 
 type ResultsViewProps = {
   result: AssessmentResult & {
@@ -35,29 +132,22 @@ export default function ResultsView({
   onRestart
 }: ResultsViewProps) {
   const { scores, derived, recommendations, metadata } = result
-  const [previous, setPrevious] = useState<AssessmentSnapshot | null>(null)
+  const [previous] = useState<AssessmentSnapshot | null>(() => {
+    const { history } = loadHistory()
+    return history.length > 0 ? history[0] : null
+  })
   const [capabilityNotes, setCapabilityNotes] = useState(result.capabilityNotes || "")
   const [governanceNotes, setGovernanceNotes] = useState(result.governanceNotes || "")
   const [isNotesExpanded, setIsNotesExpanded] = useState(false)
+  const savedResultRef = useRef<ResultsViewProps["result"] | null>(null)
 
   useEffect(() => {
-    // 1. Load history
-    const historyJson = localStorage.getItem("cp_capability_history")
-    const history: AssessmentSnapshot[] = historyJson ? JSON.parse(historyJson) : []
-    
-    // 2. Set previous (for comparison) if available
-    if (history.length > 0) {
-      setPrevious(history[0])
-    }
+    if (savedResultRef.current === result) return
+    savedResultRef.current = result
 
-    // 3. Save current to history (circular buffer of 10)
-    const newSnapshot: AssessmentSnapshot = {
-      ...result,
-      id: crypto.randomUUID()
-    }
-    const newHistory = [newSnapshot, ...history].slice(0, 10)
-    localStorage.setItem("cp_capability_history", JSON.stringify(newHistory))
-  }, [])
+    const { history, corruptedPayload } = loadHistory()
+    saveSnapshot(result, history, corruptedPayload)
+  }, [result])
 
   function downloadJSON() {
     const data = JSON.stringify({ ...result, capabilityNotes, governanceNotes }, null, 2)
@@ -155,7 +245,7 @@ export default function ResultsView({
             It highlights your current capability profile and priority areas for development.
             {previous && (
               <span style={{ display: "block", marginTop: "var(--spacing-sm)", color: "var(--color-text-secondary)", fontSize: "var(--font-size-meta)" }}>
-                * Comparison shown against your previous assessment from {new Date(previous.metadata.timestamp).toLocaleDateString()}.
+                * Comparison shown against your previous assessment{previous.metadata?.timestamp && !isNaN(new Date(previous.metadata.timestamp).getTime()) ? ` from ${new Date(previous.metadata.timestamp).toLocaleDateString()}` : ""}.
               </span>
             )}
           </p>
